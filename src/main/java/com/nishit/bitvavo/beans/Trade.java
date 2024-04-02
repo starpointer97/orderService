@@ -1,5 +1,8 @@
 package com.nishit.bitvavo.beans;
 
+import lombok.Getter;
+
+@Getter
 public class Trade {
     private final String aggressOrderId; //orderId that triggered the match
     private final String restingOrderId; //orderId of existing order in the orderBook
