@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 
-public class ReaderFactoryTest {
+public class TestReaderFactory {
 
     @Test
     public void testReaderFactory_returnStandardReader(){

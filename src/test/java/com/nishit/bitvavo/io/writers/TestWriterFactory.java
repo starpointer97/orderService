@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 
-public class WriterFactoryTest {
+public class TestWriterFactory {
 
     @Test
     public void testWriterFactory_returnStandardWriter(){

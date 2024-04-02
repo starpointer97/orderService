@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.fail;
 
-public class StandardWriterTest {
+public class TestStandardWriter {
 
     @Test
     public void testWriteToStandardOutput_NoTrades_OrderBookEmpty(){
