@@ -1,10 +1,17 @@
 package com.nishit.bitvavo.beans;
 
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+import java.util.List;
+import java.util.PriorityQueue;
+
+@AllArgsConstructor
+@Getter
 public class OrderBook {
-    private List<OrderRow> buySideOrders;
-    private List<OrderRow> sellSideOrders;
+    private PriorityQueue<Order> buySideOrders;
+    private PriorityQueue<Order> sellSideOrders;
+
 
     @Override
     public String toString() {

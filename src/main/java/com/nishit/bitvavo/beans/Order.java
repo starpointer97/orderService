@@ -1,7 +1,10 @@
 package com.nishit.bitvavo.beans;
 
+import lombok.Getter;
+
 import java.util.Objects;
 
+@Getter
 public class Order {
 
     public static final Integer NUMBER_OF_FIELDS_IN_THIS_CLASS = 5; //change this count depending on number of fields
