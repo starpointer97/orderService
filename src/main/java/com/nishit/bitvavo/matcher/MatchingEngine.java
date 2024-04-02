@@ -52,39 +52,56 @@ public class MatchingEngine {
         }
     }
 
+    private Order createOrder(Order order, Integer remainingQuantity){
+        return Order.builder().orderId(order.getOrderId())
+            .side(order.getSide())
+            .price(order.getPrice())
+            .quantity(remainingQuantity)
+            .build();
+    }
+
+    private Trade createTrade(Order order, Order restingOrder, Integer quantityToFill){
+        return Trade.builder().aggressOrderId(order.getOrderId())
+            .restingOrderId(restingOrder.getOrderId())
+            .price(restingOrder.getPrice())
+            .quantity(quantityToFill)
+            .build();
+    }
+
     /**
      * For buy side order, validate if sell side has a resting order with price <= orderPrice
      * For sell side order, validate if sell side has a resting order with price >= orderPrice
-     * @param order
      */
-    private List<Trade> executeOrder(Order order, PriorityQueue<Order> mySide, PriorityQueue<Order> oppositeSide){
+    private List<Trade> executeOrder(Order order, PriorityQueue<Order> mySideOrderBook, PriorityQueue<Order> oppositeSideOrderBook){
         List<Trade> tradesList = new LinkedList<>();
-        Order oppositeSideTopOrder = oppositeSide.peek();
+        Order oppositeSideTopOrder = oppositeSideOrderBook.peek();
         if(oppositeSideTopOrder != null && isPriceValid(order, oppositeSideTopOrder)){
-            Order restingOrder = oppositeSide.poll();
-            Integer restingOrderQuantity = restingOrder.getQuantity();
-            Integer quantityToFill = order.getQuantity();
-            if(restingOrderQuantity > quantityToFill){
-                Integer remainingQuantityInRestingOrder = restingOrderQuantity - quantityToFill;
-                Order remainingQuantityRestingOrder = new Order(restingOrder.getOrderId(), restingOrder.getSide().name(), restingOrder.getPrice(), remainingQuantityInRestingOrder);
-                oppositeSide.add(remainingQuantityRestingOrder);
-                Trade executedTrade = new Trade(order.getOrderId(), restingOrder.getOrderId(), restingOrder.getPrice(), quantityToFill);
+            Order restingOrder = oppositeSideOrderBook.poll();
+            Integer quantityAvailableInRestingOrder = restingOrder.getQuantity();
+            Integer quantityToFillInIncomingOrder = order.getQuantity();
+            if(quantityAvailableInRestingOrder > quantityToFillInIncomingOrder){
+                Integer remainingQuantityInRestingOrder = quantityAvailableInRestingOrder - quantityToFillInIncomingOrder;
+                Order remainingQuantityRestingOrder = createOrder(restingOrder, remainingQuantityInRestingOrder);
+
+                oppositeSideOrderBook.add(remainingQuantityRestingOrder);
+                Trade executedTrade = createTrade(order, restingOrder, quantityToFillInIncomingOrder);
                 tradesList.add(executedTrade);
                 return tradesList;
-            } else if (restingOrderQuantity < quantityToFill){
-                Integer remainingQuantityInAggressOrder = quantityToFill - restingOrderQuantity;
-                Order remainingQuantityAggressOrder = new Order(order.getOrderId(), order.getSide().name(), order.getPrice(), remainingQuantityInAggressOrder);
-                Trade executedTrade = new Trade(order.getOrderId(), restingOrder.getOrderId(), restingOrder.getPrice(), restingOrderQuantity);
+            } else if (quantityAvailableInRestingOrder < quantityToFillInIncomingOrder){
+                Integer remainingQuantityInAggressOrder = quantityToFillInIncomingOrder - quantityAvailableInRestingOrder;
+                Order remainingQuantityAggressOrder = createOrder(order, remainingQuantityInAggressOrder);
+
+                Trade executedTrade = createTrade(order, restingOrder, quantityAvailableInRestingOrder);
                 tradesList.add(executedTrade);
-                tradesList.addAll(executeOrder(remainingQuantityAggressOrder, mySide, oppositeSide));
+                tradesList.addAll(executeOrder(remainingQuantityAggressOrder, mySideOrderBook, oppositeSideOrderBook));
                 return tradesList;
             } else {
-                Trade executedTrade = new Trade(order.getOrderId(), restingOrder.getOrderId(), restingOrder.getPrice(), order.getQuantity());
+                Trade executedTrade = createTrade(order, restingOrder, quantityToFillInIncomingOrder);
                 tradesList.add(executedTrade);
                 return tradesList;
             }
         } else {
-            mySide.add(order);
+            mySideOrderBook.add(order);
             return tradesList;
         }
     }
