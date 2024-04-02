@@ -1,5 +1,7 @@
 package com.nishit.bitvavo.beans;
 
+import java.util.Objects;
+
 public class Order {
 
     public static final Integer NUMBER_OF_FIELDS_IN_THIS_CLASS = 5; //change this count depending on number of fields
@@ -58,5 +60,19 @@ public class Order {
      */
     private boolean validateQuantity(Integer quantity){
         return (quantity > 0 && quantity <= 999999999);
+    }
+
+    @Override public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Order order = (Order) o;
+        return Objects.equals(orderId, order.orderId) && side == order.side && Objects.equals(price, order.price)
+            && Objects.equals(quantity, order.quantity);
+    }
+
+    @Override public int hashCode() {
+        return Objects.hash(orderId, side, price, quantity);
     }
 }
