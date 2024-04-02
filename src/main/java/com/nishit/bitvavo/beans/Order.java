@@ -1,10 +1,12 @@
 package com.nishit.bitvavo.beans;
 
+import lombok.Builder;
 import lombok.Getter;
 
 import java.util.Objects;
 
 @Getter
+@Builder
 public class Order {
 
     public static final Integer NUMBER_OF_FIELDS_IN_THIS_CLASS = 5; //change this count depending on number of fields
@@ -26,6 +28,16 @@ public class Order {
                 " price needs to be > 0 and  <= 999999. Provided is " + price +
                 " quantity needs to be  > 0 and <= 999999999. Provided is " + quantity);
         }
+    }
+
+    /*
+    For use by the Builder class only
+     */
+    private Order(String orderId, BuyOrSell side, Integer price, Integer quantity){
+        this.orderId = orderId;
+        this.side = side;
+        this.price = price;
+        this.quantity = quantity;
     }
 
     private boolean validateInputs(String orderId, String side, Integer price, Integer quantity){
