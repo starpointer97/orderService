@@ -1,12 +1,17 @@
 package com.nishit.bitvavo.beans;
 
+import org.junit.Assert;
 import org.junit.Test;
 
+import java.lang.reflect.Field;
 public class TestOrder {
 
     @Test
     public void createOrder_allValidInput(){
-        new Order("1234", "B", 100, 1000);
+        Order order = new Order("1234", "B", 100, 1000);
+        Class<?> classObj = order.getClass();
+        Field[] fields = classObj.getDeclaredFields();
+        Assert.assertEquals(Order.NUMBER_OF_FIELDS_IN_THIS_CLASS, (Integer)fields.length);
     }
 
     @Test(expected = IllegalArgumentException.class)

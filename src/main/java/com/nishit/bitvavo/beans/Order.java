@@ -1,6 +1,8 @@
 package com.nishit.bitvavo.beans;
 
 public class Order {
+
+    public static final Integer NUMBER_OF_FIELDS_IN_THIS_CLASS = 5; //change this count depending on number of fields
     private final String orderId;
     private final BuyOrSell side;
     private final Integer price;
