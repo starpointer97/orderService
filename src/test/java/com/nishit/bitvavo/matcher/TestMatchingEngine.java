@@ -12,6 +12,17 @@ import static org.junit.Assert.*;
 public class TestMatchingEngine {
 
     @Test
+    public void testMatchingEngine_NoOrderPlaced(){
+        MatchingEngine.clearMatchingEngine();;
+        MatchingEngine matchingEngine = MatchingEngine.getMatchingEngine();
+        OrderBook orderBook = matchingEngine.getOrderBook();
+
+        assertNotNull(orderBook);
+        assertEquals(0, orderBook.getBuySideOrders().size());
+        assertEquals(0, orderBook.getSellSideOrders().size());
+    }
+
+    @Test
     public void testMatchingEngine_addOneBuyOrder_Successful(){
         MatchingEngine.clearMatchingEngine();
         MatchingEngine matchingEngine = MatchingEngine.getMatchingEngine();
@@ -88,25 +99,25 @@ public class TestMatchingEngine {
     public void testMatchingEngine_addMultipleBuyOrderOneSellOrder_Match(){
         MatchingEngine.clearMatchingEngine();
         MatchingEngine matchingEngine = MatchingEngine.getMatchingEngine();
-        Order buyOrder1 = new Order("1", "B", 100, 1000);
-        Order buyOrder2 = new Order("2", "B", 101, 500);
-        Order sellOrder1 = new Order("3", "S", 100, 1800);
+        Order order1 = new Order("1", "B", 100, 1000);
+        Order order2 = new Order("2", "B", 101, 500);
+        Order order3 = new Order("3", "S", 100, 1800);
 
-        List<Trade> tradeListAfterBuy1 = matchingEngine.addAndExecuteOrder(buyOrder1);
+        List<Trade> tradeListAfterBuy1 = matchingEngine.addAndExecuteOrder(order1);
         OrderBook orderBook1 = matchingEngine.getOrderBook();
 
         assertEquals(0, tradeListAfterBuy1.size());
         assertEquals(0, orderBook1.getSellSideOrders().size());
         assertEquals(1, orderBook1.getBuySideOrders().size());
 
-        List<Trade> tradeListAfterBuy2 = matchingEngine.addAndExecuteOrder(buyOrder2);
+        List<Trade> tradeListAfterBuy2 = matchingEngine.addAndExecuteOrder(order2);
         OrderBook orderBook2 = matchingEngine.getOrderBook();
 
         assertEquals(0, tradeListAfterBuy2.size());
         assertEquals(0, orderBook2.getSellSideOrders().size());
         assertEquals(2, orderBook2.getBuySideOrders().size());
 
-        List<Trade> tradeListAfterSell1 = matchingEngine.addAndExecuteOrder(sellOrder1);
+        List<Trade> tradeListAfterSell1 = matchingEngine.addAndExecuteOrder(order3);
         OrderBook orderBook3 = matchingEngine.getOrderBook();
         assertEquals(2, tradeListAfterSell1.size());
         Trade trade1 = tradeListAfterSell1.get(0);
