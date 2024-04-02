@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface Writer {
 
-    public void writeOrderBook(OrderBook orderBook);
+    void writeOrderBook(OrderBook orderBook);
 
-    public void writeTrades(List<Trade> tradeList);
+    void writeTrades(List<Trade> tradeList);
 }

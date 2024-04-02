@@ -13,7 +13,7 @@ public class TestMatchingEngine {
 
     @Test
     public void testMatchingEngine_NoOrderPlaced(){
-        MatchingEngine.clearMatchingEngine();;
+        MatchingEngine.clearMatchingEngine();
         MatchingEngine matchingEngine = MatchingEngine.getMatchingEngine();
         OrderBook orderBook = matchingEngine.getOrderBook();
 
@@ -168,8 +168,8 @@ public class TestMatchingEngine {
         OrderBook orderBook3 = matchingEngine.getOrderBook();
 
         assertEquals(0, tradeList3.size());
-        assertEquals(1, orderBook2.getBuySideOrders().size());
-        assertEquals(2, orderBook2.getSellSideOrders().size());
+        assertEquals(1, orderBook3.getBuySideOrders().size());
+        assertEquals(2, orderBook3.getSellSideOrders().size());
 
         List<Trade> tradeList4 = matchingEngine.addAndExecuteOrder(order4);
         OrderBook orderBook4 = matchingEngine.getOrderBook();
@@ -182,8 +182,8 @@ public class TestMatchingEngine {
         OrderBook orderBook5 = matchingEngine.getOrderBook();
 
         assertEquals(0, tradeList5.size());
-        assertEquals(2, orderBook2.getBuySideOrders().size());
-        assertEquals(3, orderBook2.getSellSideOrders().size());
+        assertEquals(2, orderBook5.getBuySideOrders().size());
+        assertEquals(3, orderBook5.getSellSideOrders().size());
 
         List<Trade> tradeList6 = matchingEngine.addAndExecuteOrder(order6);
         OrderBook orderBook6 = matchingEngine.getOrderBook();
@@ -223,8 +223,8 @@ public class TestMatchingEngine {
         OrderBook orderBook3 = matchingEngine.getOrderBook();
 
         assertEquals(0, tradeList3.size());
-        assertEquals(1, orderBook2.getBuySideOrders().size());
-        assertEquals(2, orderBook2.getSellSideOrders().size());
+        assertEquals(1, orderBook3.getBuySideOrders().size());
+        assertEquals(2, orderBook3.getSellSideOrders().size());
 
         List<Trade> tradeList4 = matchingEngine.addAndExecuteOrder(order4);
         OrderBook orderBook4 = matchingEngine.getOrderBook();
@@ -237,8 +237,8 @@ public class TestMatchingEngine {
         OrderBook orderBook5 = matchingEngine.getOrderBook();
 
         assertEquals(0, tradeList5.size());
-        assertEquals(2, orderBook2.getBuySideOrders().size());
-        assertEquals(3, orderBook2.getSellSideOrders().size());
+        assertEquals(2, orderBook5.getBuySideOrders().size());
+        assertEquals(3, orderBook5.getSellSideOrders().size());
 
         List<Trade> tradeList6 = matchingEngine.addAndExecuteOrder(order6);
         OrderBook orderBook6 = matchingEngine.getOrderBook();

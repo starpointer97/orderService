@@ -4,5 +4,5 @@ import java.util.Optional;
 
 public interface Reader {
 
-    public Optional<String> nextLine();
+    Optional<String> nextLine();
 }
