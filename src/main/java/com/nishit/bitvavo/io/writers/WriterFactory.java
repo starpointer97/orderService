@@ -3,7 +3,6 @@ package com.nishit.bitvavo.io.writers;
 import com.nishit.bitvavo.beans.IOMode;
 
 public class WriterFactory {
-
     public static Writer getWriter(IOMode outputMode){
         switch (outputMode){
             case STANDARD:

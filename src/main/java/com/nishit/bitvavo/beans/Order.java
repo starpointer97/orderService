@@ -57,9 +57,4 @@ public class Order {
     private boolean validateQuantity(Integer quantity){
         return (quantity > 0 && quantity <= 999999999);
     }
-
-
-
-
-
 }
