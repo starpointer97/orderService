@@ -22,8 +22,8 @@ public class MatchingEngine {
 
     @VisibleForTesting
     MatchingEngine(){
-        Comparator<Order> buySideComparator = Comparator.comparing(Order::getPrice).reversed().thenComparing(Order::getOrderId);
-        Comparator<Order> sellSideComparator = Comparator.comparing(Order::getPrice).thenComparing(Order::getOrderId);
+        Comparator<Order> buySideComparator = Comparator.comparing(Order::getPrice).reversed(); // For same price, insertion order would be preserved
+        Comparator<Order> sellSideComparator = Comparator.comparing(Order::getPrice);// For same price, insertion order would be preserved
 
         buySideOrders = new PriorityQueue<>(buySideComparator);
         sellSideOrders = new PriorityQueue<>(sellSideComparator);
@@ -110,6 +110,10 @@ public class MatchingEngine {
         return MATCHING_ENGINE;
     }
 
+    /**
+     * May be required at End of Trading day
+     * where we want to purge all open orders
+     */
     public static void clearMatchingEngine(){
         MATCHING_ENGINE.sellSideOrders.clear();
         MATCHING_ENGINE.buySideOrders.clear();

@@ -3,6 +3,7 @@ package com.nishit.bitvavo.matcher;
 import com.nishit.bitvavo.beans.Order;
 import com.nishit.bitvavo.beans.OrderBook;
 import com.nishit.bitvavo.beans.Trade;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
@@ -11,10 +12,50 @@ import static org.junit.Assert.*;
 
 public class TestMatchingEngine {
 
+    private MatchingEngine matchingEngine = MatchingEngine.getMatchingEngine();
+
+    @Before
+    public void initialize(){
+        MatchingEngine.clearMatchingEngine();
+    }
+    @Test
+    public void testMatchingEngine_MultipleBuyOrdersForSamePrice_MaintainOrdering() {
+        Order order1 = new Order("1235", "B", 100, 1000);
+        Order order2 = new Order("1234", "B", 100, 1000);
+        matchingEngine.addAndExecuteOrder(order1);
+        matchingEngine.addAndExecuteOrder(order2);
+        assertEquals(2, matchingEngine.buySideOrders.size());
+        assertEquals(0, matchingEngine.sellSideOrders.size());
+        Order actualOrder1 = matchingEngine.buySideOrders.poll();
+        Order actualOrder2 = matchingEngine.buySideOrders.poll();
+
+        assertNotNull(actualOrder1);
+        assertEquals(order1.getOrderId(), actualOrder1.getOrderId());
+
+        assertNotNull(actualOrder2);
+        assertEquals(order2.getOrderId(), actualOrder2.getOrderId());
+    }
+
+    @Test
+    public void testMatchingEngine_MultipleSellOrdersForSamePrice_MaintainOrdering() {
+        Order order1 = new Order("1235", "S", 100, 1000);
+        Order order2 = new Order("1234", "S", 100, 1000);
+        matchingEngine.addAndExecuteOrder(order1);
+        matchingEngine.addAndExecuteOrder(order2);
+        assertEquals(0, matchingEngine.buySideOrders.size());
+        assertEquals(2, matchingEngine.sellSideOrders.size());
+        Order actualOrder1 = matchingEngine.sellSideOrders.poll();
+        Order actualOrder2 = matchingEngine.sellSideOrders.poll();
+
+        assertNotNull(actualOrder1);
+        assertEquals(order1.getOrderId(), actualOrder1.getOrderId());
+
+        assertNotNull(actualOrder2);
+        assertEquals(order2.getOrderId(), actualOrder2.getOrderId());
+    }
+
     @Test
     public void testMatchingEngine_NoOrderPlaced(){
-        MatchingEngine.clearMatchingEngine();
-        MatchingEngine matchingEngine = MatchingEngine.getMatchingEngine();
         OrderBook orderBook = matchingEngine.getOrderBook();
 
         assertNotNull(orderBook);
@@ -24,8 +65,6 @@ public class TestMatchingEngine {
 
     @Test
     public void testMatchingEngine_addOneBuyOrder_Successful(){
-        MatchingEngine.clearMatchingEngine();
-        MatchingEngine matchingEngine = MatchingEngine.getMatchingEngine();
         Order order = new Order("1234", "B", 100, 1000);
         List<Trade> tradeList = matchingEngine.addAndExecuteOrder(order);
         OrderBook orderBook = matchingEngine.getOrderBook();
@@ -37,8 +76,6 @@ public class TestMatchingEngine {
 
     @Test
     public void testMatchingEngine_addOneSellOrder_Successful(){
-        MatchingEngine.clearMatchingEngine();
-        MatchingEngine matchingEngine = MatchingEngine.getMatchingEngine();
         Order order = new Order("1234", "S", 100, 1000);
         List<Trade> tradeList = matchingEngine.addAndExecuteOrder(order);
         OrderBook orderBook = matchingEngine.getOrderBook();
@@ -50,8 +87,6 @@ public class TestMatchingEngine {
 
     @Test
     public void testMatchingEngine_addOneBuyOrderOneSellOrder_NoMatch(){
-        MatchingEngine.clearMatchingEngine();
-        MatchingEngine matchingEngine = MatchingEngine.getMatchingEngine();
         Order buyOrder = new Order("1", "B", 95, 1000);
         Order sellOrder = new Order("2", "S", 100, 1000);
         List<Trade> tradeListAfterBuy = matchingEngine.addAndExecuteOrder(buyOrder);
@@ -70,8 +105,6 @@ public class TestMatchingEngine {
 
     @Test
     public void testMatchingEngine_addOneBuyOrderOneSellOrder_Match(){
-        MatchingEngine.clearMatchingEngine();
-        MatchingEngine matchingEngine = MatchingEngine.getMatchingEngine();
         Order buyOrder = new Order("1", "B", 100, 1000);
         Order sellOrder = new Order("2", "S", 100, 1000);
         List<Trade> tradeListAfterBuy = matchingEngine.addAndExecuteOrder(buyOrder);
@@ -97,8 +130,6 @@ public class TestMatchingEngine {
 
     @Test
     public void testMatchingEngine_addMultipleBuyOrderOneSellOrder_Match(){
-        MatchingEngine.clearMatchingEngine();
-        MatchingEngine matchingEngine = MatchingEngine.getMatchingEngine();
         Order order1 = new Order("1", "B", 100, 1000);
         Order order2 = new Order("2", "B", 101, 500);
         Order order3 = new Order("3", "S", 100, 1800);
@@ -141,8 +172,6 @@ public class TestMatchingEngine {
 
     @Test
     public void testMatchingEngine_Input1(){
-        MatchingEngine.clearMatchingEngine();
-        MatchingEngine matchingEngine = MatchingEngine.getMatchingEngine();
         Order order1 = new Order("10000", "B", 98, 25500);
         Order order2 = new Order("10005", "S", 105, 20000);
         Order order3 = new Order("10001", "S", 100, 500);
@@ -195,8 +224,6 @@ public class TestMatchingEngine {
 
     @Test
     public void testMatchingEngine_Input2(){
-        MatchingEngine.clearMatchingEngine();
-        MatchingEngine matchingEngine = MatchingEngine.getMatchingEngine();
         Order order1 = new Order("10000", "B", 98, 25500);
         Order order2 = new Order("10005", "S", 105, 20000);
         Order order3 = new Order("10001", "S", 100, 500);
