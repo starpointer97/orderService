@@ -5,18 +5,22 @@ import com.nishit.bitvavo.beans.Trade;
 
 import java.util.List;
 
+import static com.nishit.bitvavo.constants.Constants.NEW_LINE;
+
+
 public class StandardWriter implements Writer {
 
     @Override
-    public void writeOrderBook(OrderBook orderBook) {
-        //TODO : Implement after getting clarity from Bitvavo on output format.
+    public String writeOutOrderBook(OrderBook orderBook) {
+        return orderBook.toString();
     }
 
     @Override
-    public void writeTrades(List<Trade> tradeList) {
+    public String writeTrades(List<Trade> tradeList) {
+        StringBuilder tradesOutputBuilder = new StringBuilder();
         for(Trade trade : tradeList){
-            System.out.println(trade);
+            tradesOutputBuilder.append(trade.toString()).append(NEW_LINE);
         }
-
+        return tradesOutputBuilder.toString();
     }
 }

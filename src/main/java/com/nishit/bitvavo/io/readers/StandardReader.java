@@ -16,4 +16,8 @@ public class StandardReader implements Reader{
         }
         return Optional.empty();
     }
+
+    @Override public void closeStream() {
+        scanner.close();
+    }
 }

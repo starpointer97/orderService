@@ -5,4 +5,5 @@ import java.util.Optional;
 public interface Reader {
 
     Optional<String> nextLine();
+    void closeStream();
 }
