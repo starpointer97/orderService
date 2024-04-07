@@ -22,8 +22,8 @@ public class MatchingEngine {
 
     @VisibleForTesting
     MatchingEngine(){
-        Comparator<Order> buySideComparator = Comparator.comparing(Order::getPrice).reversed(); // For same price, insertion order would be preserved
-        Comparator<Order> sellSideComparator = Comparator.comparing(Order::getPrice);// For same price, insertion order would be preserved
+        Comparator<Order> buySideComparator = Comparator.comparing(Order::getPrice).reversed().thenComparing(Order::getInsertionTimestamp); // For same price, insertion order would be preserved
+        Comparator<Order> sellSideComparator = Comparator.comparing(Order::getPrice).thenComparing(Order::getInsertionTimestamp);// For same price, insertion order would be preserved
 
         buySideOrders = new PriorityQueue<>(buySideComparator);
         sellSideOrders = new PriorityQueue<>(sellSideComparator);
@@ -57,6 +57,7 @@ public class MatchingEngine {
             .side(order.getSide())
             .price(order.getPrice())
             .quantity(remainingQuantity)
+            .insertionTimestamp(order.getInsertionTimestamp()) //Need to maintain original timestamp of the order for PriorityQueue comparison
             .build();
     }
 
@@ -72,7 +73,7 @@ public class MatchingEngine {
      * For buy side order, validate if sell side has a resting order with price <= orderPrice
      * For sell side order, validate if sell side has a resting order with price >= orderPrice
      */
-    private List<Trade> executeOrder(Order order, PriorityQueue<Order> mySideOrderBook, PriorityQueue<Order> oppositeSideOrderBook){
+    private List<Trade> executeOrder(Order order, PriorityQueue<Order> sameSideOrderBook, PriorityQueue<Order> oppositeSideOrderBook){
         List<Trade> tradesList = new LinkedList<>();
         Order oppositeSideTopOrder = oppositeSideOrderBook.peek();
         if(oppositeSideTopOrder != null && isPriceValid(order, oppositeSideTopOrder)){
@@ -81,9 +82,9 @@ public class MatchingEngine {
             Integer quantityToFillInIncomingOrder = order.getQuantity();
             if(quantityAvailableInRestingOrder > quantityToFillInIncomingOrder){
                 Integer remainingQuantityInRestingOrder = quantityAvailableInRestingOrder - quantityToFillInIncomingOrder;
-                Order remainingQuantityRestingOrder = createOrder(restingOrder, remainingQuantityInRestingOrder);
+                Order newRestingOrderWithRemainingQuantity = createOrder(restingOrder, remainingQuantityInRestingOrder);
 
-                oppositeSideOrderBook.add(remainingQuantityRestingOrder);
+                oppositeSideOrderBook.add(newRestingOrderWithRemainingQuantity);
                 Trade executedTrade = createTrade(order, restingOrder, quantityToFillInIncomingOrder);
                 tradesList.add(executedTrade);
                 return tradesList;
@@ -93,7 +94,7 @@ public class MatchingEngine {
 
                 Trade executedTrade = createTrade(order, restingOrder, quantityAvailableInRestingOrder);
                 tradesList.add(executedTrade);
-                tradesList.addAll(executeOrder(remainingQuantityAggressOrder, mySideOrderBook, oppositeSideOrderBook));
+                tradesList.addAll(executeOrder(remainingQuantityAggressOrder, sameSideOrderBook, oppositeSideOrderBook));
                 return tradesList;
             } else {
                 Trade executedTrade = createTrade(order, restingOrder, quantityToFillInIncomingOrder);
@@ -101,7 +102,7 @@ public class MatchingEngine {
                 return tradesList;
             }
         } else {
-            mySideOrderBook.add(order);
+            sameSideOrderBook.add(order);
             return tradesList;
         }
     }
