@@ -12,7 +12,7 @@ public class TestCSVParser {
     public void testParseInput_ValidatedSuccessfully(){
         String input = "10000,B,98,25500";
         Order actualOrder = CSVParser.parseCSVInput(input);
-        Order expectedOrder = new Order("10000", BuyOrSell.B.name(),98, 25500);
+        Order expectedOrder = new Order("10000", BuyOrSell.B.name(),"98", "25500");
         assertNotNull(actualOrder);
         assertEquals(expectedOrder, actualOrder);
     }
