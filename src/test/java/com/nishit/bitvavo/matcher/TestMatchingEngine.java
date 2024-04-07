@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 
 public class TestMatchingEngine {
 
-    private MatchingEngine matchingEngine = MatchingEngine.getMatchingEngine();
+    private final MatchingEngine matchingEngine = MatchingEngine.getMatchingEngine();
 
     @Before
     public void initialize(){

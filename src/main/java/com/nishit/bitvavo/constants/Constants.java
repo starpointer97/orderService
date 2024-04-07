@@ -7,7 +7,6 @@ public class Constants {
     public static final String BLANK_SPACE = " ";
     public static final String ORDER_BOOK_DELIMITER = "|";
     public static final String NEW_LINE = "\n";
-    public static final int ORDER_LENGTH_IN_ORDER_BOOK=19;
     public static final String TRADE_WORD = "trade";
     public static final String TRADE_DELIMITER = ",";
 }

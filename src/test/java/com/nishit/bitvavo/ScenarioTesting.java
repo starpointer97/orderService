@@ -74,9 +74,4 @@ public class ScenarioTesting {
         assertEquals(expectedMD5Output, md5Output);
     }
 
-    @Test
-    public void test_Input2(){
-
-    }
-
 }

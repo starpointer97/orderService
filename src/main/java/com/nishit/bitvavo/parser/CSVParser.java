@@ -1,7 +1,6 @@
 package com.nishit.bitvavo.parser;
 
 import com.nishit.bitvavo.beans.Order;
-import com.nishit.bitvavo.utils.OrderValidator;
 
 public class CSVParser {
 
