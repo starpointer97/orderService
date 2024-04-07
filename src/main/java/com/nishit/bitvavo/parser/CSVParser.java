@@ -1,6 +1,7 @@
 package com.nishit.bitvavo.parser;
 
 import com.nishit.bitvavo.beans.Order;
+import com.nishit.bitvavo.utils.OrderValidator;
 
 public class CSVParser {
 
@@ -14,10 +15,10 @@ public class CSVParser {
     }
 
     private static boolean validateOrderInputSize(String[] inputArray){
-        return (inputArray.length == Order.NUMBER_OF_FIELDS_IN_THIS_CLASS - 1);
+        return (inputArray.length == Order.NUMBER_OF_MEMBER_FIELDS_IN_INPUT);
     }
 
     private static Order createOrder(final String[] inputArray){
-        return new Order(inputArray[0], inputArray[1], Integer.parseInt(inputArray[2]), Integer.parseInt(inputArray[3]));
+        return new Order(inputArray[0], inputArray[1], inputArray[2], inputArray[3]);
     }
 }

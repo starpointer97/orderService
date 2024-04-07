@@ -4,6 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import static com.nishit.bitvavo.constants.Constants.TRADE_WORD;
+import static com.nishit.bitvavo.constants.Constants.TRADE_DELIMITER;
+import static com.nishit.bitvavo.constants.Constants.BLANK_SPACE;
+
 @Getter
 @Builder
 @AllArgsConstructor
@@ -16,7 +20,7 @@ public class Trade {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("trade").append(" ").append(aggressOrderId).append(",").append(restingOrderId).append(",").append(price).append(",").append(quantity);
+        builder.append(TRADE_WORD).append(BLANK_SPACE).append(aggressOrderId).append(TRADE_DELIMITER).append(restingOrderId).append(TRADE_DELIMITER).append(price).append(TRADE_DELIMITER).append(quantity);
         return builder.toString();
     }
 }
